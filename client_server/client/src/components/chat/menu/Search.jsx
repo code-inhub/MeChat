@@ -1,4 +1,4 @@
-import SearchIcon from "@mui/icons-material/Search";
+ import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
 import {Box , styled} from '@mui/material';
 
@@ -29,7 +29,7 @@ const InputField =styled(InputBase)`
   height:15px;
   font-size:14px;
 `;
-const Search = () => {
+const Search = ({setText}) => {
   return (
     <Component>
       <Wrapper>
@@ -38,6 +38,7 @@ const Search = () => {
         </Icon>
         <InputField 
             placeholder="search or start new chat"
+            onChange={(e)=>setText(e.target.value)}
         />
       </Wrapper>
     </Component>
