@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { EmojiEmotions, AttachFile, Mic } from "@mui/icons-material";
+import { EmojiEmotionsOutlined, AttachFile, Mic } from "@mui/icons-material";
 import { Box, styled, InputBase } from "@mui/material";
 
 // import { uploadFile } from "../../../services/api";
@@ -37,7 +37,8 @@ const ClipIcon = styled(AttachFile)`
   transform: rotate(40deg);
 `;
 
-const Footer = () => {
+const Footer = ({ sendText, setValue ,value }) => {
+  // const [text,setText] = useState("");
   // useEffect(() => {
   //   const getImage = async () => {
   //     if (file) {
@@ -59,24 +60,25 @@ const Footer = () => {
 
   return (
     <Container>
-      <EmojiEmotions />
-      <label htmlFor="fileInput">
-        <ClipIcon />
-      </label>
-      <input
+      <EmojiEmotionsOutlined />
+      {/* <label htmlFor="fileIn  put"> */}
+      <ClipIcon />
+      {/* </label> */}
+      {/* <input
         type="file"
         id="fileInput"
         style={{ display: "none" }}
-        // onChange={(e) => onFileChange(e)}
-      />
+        onChange={(e) => onFileChange(e)}
+      /> */}
 
       <Search>
         <InputField
           placeholder="Type a message"
           inputProps={{ "aria-label": "search" }}
-          // onChange={(e) => setValue(e.target.value)}
-          // onKeyPress={(e) => sendText(e)}
-          // value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyPress={(e) => sendText(e)}
+          value={value}
+
         />
       </Search>
       <Mic />
