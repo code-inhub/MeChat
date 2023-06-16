@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { EmojiEmotionsOutlined, AttachFile, Mic } from "@mui/icons-material";
 import { Box, styled, InputBase } from "@mui/material";
 
-// import { uploadFile } from "../../../services/api";
+import { uploadFile } from "../../../services/api";
 
 const Container = styled(Box)`
   height: 55px;
@@ -37,39 +37,39 @@ const ClipIcon = styled(AttachFile)`
   transform: rotate(40deg);
 `;
 
-const Footer = ({ sendText, setValue ,value }) => {
-  // const [text,setText] = useState("");
-  // useEffect(() => {
-  //   const getImage = async () => {
-  //     if (file) {
-  //       const data = new FormData();
-  //       data.append("name", file.name);
-  //       data.append("file", file);
+const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
+  // const [text, setText] = useState("");
+  useEffect(() => {
+    const getImage = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
 
-  //       const response = await uploadFile(data);
-  //       setImage(response.data);
-  //     }
-  //   };
-  //   getImage();
-  // }, [file]);
+        const response = await uploadFile(data);
+        setImage(response.data);
+      }
+    };
+    getImage();
+  }, [file]);
 
-  // const onFileChange = (e) => {
-  //   setValue(e.target.files[0].name);
-  //   setFile(e.target.files[0]);
-  // };
+  const onFileChange = (e) => {
+    setValue(e.target.files[0].name);
+    setFile(e.target.files[0]);
+  };
 
   return (
     <Container>
       <EmojiEmotionsOutlined />
-      {/* <label htmlFor="fileIn  put"> */}
-      <ClipIcon />
-      {/* </label> */}
-      {/* <input
+      <label htmlFor="fileInput">
+        <ClipIcon />
+      </label>
+      <input
         type="file"
         id="fileInput"
         style={{ display: "none" }}
         onChange={(e) => onFileChange(e)}
-      /> */}
+      />
 
       <Search>
         <InputField
@@ -78,7 +78,6 @@ const Footer = ({ sendText, setValue ,value }) => {
           onChange={(e) => setValue(e.target.value)}
           onKeyPress={(e) => sendText(e)}
           value={value}
-
         />
       </Search>
       <Mic />
