@@ -31,7 +31,7 @@ export const getConversation = async (data) => {
     let response = await axios.post(`${url}/conversation/get`, data);
     return response.data;
   } catch (err) {
-    console.log("error while calling getConversation api", err.message);
+    console.log("error while calling getConversation api", err);
   }
 };
 
@@ -54,10 +54,11 @@ export const getMessages = async (id) => {
 
 export const uploadFile = async (data) => {
   try {
-    // return await axios.post(`${url}/file/upload`, data); in your code you are not returning response
-    let response = await axios.post(`${url}/file/upload`, data);
-    return response.data; // now i have written the code to return the response data you get from the api
+    await axios.post(`${url}/file/upload`, data);
+
+    // let response = await axios.post(`${url}/file/upload`, data);
+    // return response.data;
   } catch (error) {
-    console.log("Error while calling uploadFile api", error);
+    console.log("Error while calling uploadFile api..", error);
   }
 };
