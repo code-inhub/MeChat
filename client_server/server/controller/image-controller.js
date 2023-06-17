@@ -14,7 +14,7 @@ conn.once("open", () => {
   gfs.collection("fs");
 });
 
-export const uploadFile = async (request, response) => {
+export const uploadImage = async (request, response) => {
   if (!request.file) {
     return response.status(404).json("file not found");
   }
