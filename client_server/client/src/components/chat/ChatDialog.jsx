@@ -4,6 +4,7 @@ import EmptyChat from "./emptyChat/EmptyChat";
 import ChatBox from "./emptyChat/ChatBox";
 import { useContext } from "react";
 import { AccountContext } from "../../context/AccountProvider";
+// import { UserContext } from "../../context/UserProvider";
 
 const Component = styled(Box)`
   display: flex;
@@ -29,7 +30,7 @@ const dialogstyle = {
 };
 
 const ChatDialog = () => {
-  const {person}=useContext(AccountContext);
+  const { person }=useContext(AccountContext);
   return (
     <Dialog open={true} PaperProps={{ sx: dialogstyle }} hideBackdrop={true} maxWidth={'md'}>
       <Component>

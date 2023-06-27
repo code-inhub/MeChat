@@ -12,7 +12,7 @@ export const addUser = async (data) => {
 export const getUsers = async () => {
   try {
     const response = await axios.get(`${url}/users`);
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
     console.log("error while calling getusers api", error.message);
@@ -48,16 +48,16 @@ export const getMessages = async (id) => {
     let response = await axios.get(`${url}/message/get/${id}`);
     return response.data;
   } catch (error) {
-    console.log("error while calling getMessage api", error);
+    console.log("error while calling getMessage   api", error);
   }
 };
 
 export const uploadFile = async (data) => {
   try {
-    await axios.post(`${url}/file/upload`, data);
-
-    // let response = await axios.post(`${url}/file/upload`, data);
-    // return response.data;
+    console.log("sending post request");
+   return await axios.post(`${url}/file/upload`, data);
+   
+   
   } catch (error) {
     console.log("Error while calling uploadFile api..", error);
   }

@@ -45,8 +45,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
         const data = new FormData();
         data.append("name", file.name);
         data.append("file", file);
-
-        const response = await uploadFile(data);
+        let response = await uploadFile(data);
         setImage(response.data);
       }
     };
@@ -76,7 +75,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
           placeholder="Type a message"
           inputProps={{ "aria-label": "search" }}
           onChange={(e) => setValue(e.target.value)}
-          onKeyPress={(e) => sendText(e)}
+          onKeyDown={(e) => sendText(e)}
           value={value}
         />
       </Search>

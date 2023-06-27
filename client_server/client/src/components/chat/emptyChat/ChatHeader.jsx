@@ -51,10 +51,9 @@ const ChatHeader = ({ person }) => {
       <Box>
         <Name>{person.name}</Name>
         <Status>
-          {/* {activeUsers?.find((user) => user.sub === person.sub)
+          {activeUsers?.find((user) => user.sub === person.sub)
             ? "Online"
-            : "Offline"} */}
-          online
+            : "Offline"}
         </Status>
       </Box>
       <RightContainer>

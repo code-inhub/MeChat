@@ -4,6 +4,7 @@ import { Box, styled, Divider } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
 import Conversation from "./Conversation";
 
+
 const Component = styled(Box)`
   height: 81vh;
   overflow: overlay;
@@ -14,30 +15,41 @@ const StyledDivider = styled(Divider)`
   opacity: 0.6;
 `;
 
-const Conversations = ({text}) => {
+const Conversations = ({ text }) => {
   const [users, setUsers] = useState([]);
+  const { account, socket,setActiveUsers } = useContext(AccountContext);
 
-  const { account } = useContext(AccountContext);
   useEffect(() => {
     const fetchData = async () => {
       let data = await getUsers();
-      let filteredData = data.filter(user=>user.name.toLowerCase().includes(text.toLowerCase()));
+      let filteredData = data.filter((user) =>
+        user.name.toLowerCase().includes(text.toLowerCase())
+      );
       setUsers(filteredData);
     };
     fetchData();
   }, [text]);
-  
+
+  useEffect(() => {
+    socket.current.emit("addUsers", account);
+    socket.current.on("getUsers",users=>{
+    setActiveUsers(users)}
+  ,[account]);
+    });
+
   return (
     <Component>
-      { 
-      users.map(user =>(
-          user.sub !== account.sub && 
+      { users && users.map(
+        (user,index) =>
+          user.sub !== account.sub && (
             <>
               <Conversation user={user} />
-              <StyledDivider />
+              {
+                users.length !== index + 1 && <StyledDivider />
+              }
             </>
-        ))
-      }
+          )
+      )}
       ;
     </Component>
   );

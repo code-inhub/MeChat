@@ -6,7 +6,7 @@ import {
 } from "../controller/conversation-controller.js";
 
 import { getMessages, newMessage } from "../controller/message-controller.js";
-import { uploadImage, getImage } from "../controller/image-controller.js";
+import { uploadImage , getImage } from "../controller/image-controller.js";
 
 import upload from "../utilis/upload.js";
 

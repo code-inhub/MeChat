@@ -1,7 +1,10 @@
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
-import { useContext } from "react";
-import { setConversation } from "../../../services/api";
+// import {UserContext} from "../../../context/UserProvider"
+import { setConversation, getConversation } from "../../../services/api";
+import { formatDate } from "../../../utils/common-utils";
+import { emptyProfilePicture } from "../../../constants/data";
 
 const Component = styled(Box)`
   display: flex;
@@ -18,8 +21,40 @@ const Image = styled("img")({
   objectFit: "cover",
 });
 
+const Container = styled(Box)`
+  display: flex;
+`;
+const Timestamp = styled(Typography)`
+  font-size: 12px;
+  margin-left: auto;
+  color: #00000099;
+  padding-right: 10px;
+`;
+
+const Text = styled(Typography)`
+  display: block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+`;
+
 const Conversation = ({ user }) => {
-  const { setPerson, account } = useContext(AccountContext);
+  const url = user.picture || emptyProfilePicture;
+  //  const {setPerson} = useContext(UserContext)
+  const { account, newMessageFlag, setPerson } = useContext(AccountContext);
+
+  const [message, setMessage] = useState({});
+
+  useEffect(() => {
+    const getConversationDetails = async () => {
+      const data = await getConversation({
+        senderId: account.sub,
+        receiverId: user.sub,
+      });
+
+      setMessage({ text: data?.message, timeStamp: data?.updatedAt });
+    };
+    getConversationDetails();
+  }, [newMessageFlag]);
 
   const getUser = async () => {
     setPerson(user);
@@ -29,10 +64,20 @@ const Conversation = ({ user }) => {
   return (
     <Component onClick={() => getUser()}>
       <Box>
-        <Image src={user.picture} alt="user" />
+        <Image src={url} alt="dp" />
       </Box>
-      <Box>
-        <Typography>{user.name}</Typography>
+      <Box style={{ width: "100%" }}>
+        <Container>
+          <Typography>{user.name}</Typography>
+          {message?.text && (
+            <Timestamp>{formatDate(message?.timeStamp)}</Timestamp>
+          )}
+        </Container>
+        <Box>
+          <Text>
+            {message?.text?.includes("localhost") ? "media" : message.text}
+          </Text>
+        </Box>
       </Box>
     </Component>
   );

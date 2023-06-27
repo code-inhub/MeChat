@@ -15,11 +15,11 @@ const Wrapper = styled(Box)`
   background-size: 50%;
 `;
 
-const StyledFooter = styled(Box)`
-  height: 55px;
-  background: #ededed;
-  width: 100%;
-`;
+// const StyledFooter = styled(Box)`
+//   height: 55px;
+//   background: #ededed;
+//   width: 100%;
+// `;
 
 const Component = styled(Box)`
   height: 79vh;
@@ -32,24 +32,40 @@ const Container = styled(Box)`
 
 const Messages = ({ person, conversation }) => {
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [newMessageFlag, setNewMessageFlag] = useState(false);
-  const { account } = useContext(AccountContext);
+  const [messages, setMessages] = useState([]); 
   const [file, setFile] = useState();
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
+  const [incomingMessage, setIncomingMessage] =useState(null);
+  const scrollRef = useRef();
+  
+  const { account, socket ,newMessageFlag, setNewMessageFlag} = useContext(AccountContext);
+  
+  useEffect(() => {
+    socket.current.on("getMessage", (data) => {
+      setIncomingMessage({ ...data, createdAt: Date.now() });
+    });
+  },[]);
 
   useEffect(() => {
     const getMessageDetails = async () => {
       let data = await getMessages(conversation._id);
-      console.log(data);
       setMessages(data);
     };
+    getMessageDetails();
+  }, [person._id, conversation?._id, newMessageFlag]);
 
-    conversation._id && getMessageDetails();
-  }, [person._id, conversation._id, newMessageFlag]);
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ transition: "smooth" });
+  }, [messages]);
+  
 
-  const SendText = async (e) => {
-    console.log(e);
+  useEffect(() => {
+    incomingMessage && conversation?.members?.includes(incomingMessage.senderId) && setMessages(prev => [...prev , incomingMessage])
+  }, [incomingMessage, conversation]);  
+
+
+ const SendText = async (e) => {
+
     const code = e.keyCode || e.which;
     if (code === 13) {
       let message = {};
@@ -71,6 +87,8 @@ const Messages = ({ person, conversation }) => {
         };
       }
 
+      socket.current.emit("sendMessage", message);
+
       await newMessage(message);
       setValue("");
       setFile("");
@@ -84,7 +102,7 @@ const Messages = ({ person, conversation }) => {
       <Component>
         {messages &&
           messages.map((message) => (
-            <Container>
+            <Container ref={scrollRef}>
               <Message message={message} />
             </Container>
           ))}
